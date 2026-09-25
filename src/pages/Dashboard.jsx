@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { claimFaucet, clearToken, getBalance, getHistory, getReceipt, logout } from "../api/index.js";
-import { AdminPanel } from "../components/AdminPanel.jsx";
 import { BalanceCard } from "../components/BalanceCard.jsx";
 import { BankHeader } from "../components/BankHeader.jsx";
 import { BankSidebar } from "../components/BankSidebar.jsx";
@@ -24,7 +23,6 @@ const VIEW_LABELS = {
   localChain: "Local Chain",
   wallet: "Wallet",
   security: "Security",
-  admin: "Admin"
 };
 
 export function Dashboard({ user, onLogout }) {
@@ -175,8 +173,6 @@ function renderView(props) {
       return <WalletView balance={props.balance} user={props.user} />;
     case "security":
       return <SecurityPanel user={props.user} />;
-    case "admin":
-      return <AdminPanel currentUser={props.user} />;
     default:
       return <OverviewView {...props} />;
   }
