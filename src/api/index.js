@@ -1,4 +1,5 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:4000/api";
+const DEFAULT_API_BASE_URL = "https://paychain-backend-s93o.onrender.com/api";
+const API_BASE_URL = normalizeApiBaseUrl(import.meta.env.VITE_API_BASE_URL ?? DEFAULT_API_BASE_URL);
 const TOKEN_KEY = "paychain_token";
 
 export function getStoredToken() {
@@ -164,3 +165,23 @@ async function readJson(response) {
     return null;
   }
 }
+
+function normalizeApiBaseUrl(value) {
+  const trimmed = String(value ?? "").trim();
+  const markdownLinkMatch = trimmed.match(/^\[[^\]]+\]\((https?:\/\/[^)]+)\)$/);
+  const rawUrl = markdownLinkMatch?.[1] ?? trimmed;
+
+  try {
+    const url = new URL(rawUrl);
+    url.pathname = url.pathname.replace(/\/+$/, "");
+
+    if (!url.pathname.endsWith("/api")) {
+      url.pathname = `${url.pathname}/api`.replace(/\/{2,}/g, "/");
+    }
+
+    return url.toString().replace(/\/+$/, "");
+  } catch {
+    return rawUrl.replace(/\/+$/, "");
+  }
+}
+
