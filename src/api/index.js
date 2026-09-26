@@ -106,6 +106,10 @@ export async function getAdminTransactions(params = {}) {
   return request(`/admin/transactions${toQuery(params)}`);
 }
 
+export async function getAdminEscrows(params = {}) {
+  return request(`/admin/escrows${toQuery(params)}`);
+}
+
 export async function resetUserDemoBalance(id) {
   return request(`/admin/users/${encodeURIComponent(id)}/reset-demo-balance`, { method: "POST" });
 }

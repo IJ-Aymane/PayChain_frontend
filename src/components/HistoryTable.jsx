@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { disputeEscrow, refundEscrow, releaseEscrow } from "../api/index.js";
+import { disputeEscrow, releaseEscrow } from "../api/index.js";
 import { Button } from "./Button.jsx";
 
 const BASE_SEPOLIA_TX_URL = "https://sepolia.basescan.org/tx";
@@ -107,7 +107,6 @@ function EscrowRow({ escrow, user, onRefresh }) {
   const isBuyer = escrow.buyer_user_id === user?.id;
   const canRelease = isBuyer && escrow.status === "AWAITING_DELIVERY";
   const canDispute = escrow.status === "AWAITING_DELIVERY";
-  const canRefund = escrow.status === "DISPUTED";
 
   async function runAction(name, action) {
     setBusyAction(name);
@@ -151,9 +150,6 @@ function EscrowRow({ escrow, user, onRefresh }) {
             </Button>
             <Button disabled={!canDispute || Boolean(busyAction)} onClick={() => runAction("dispute", disputeEscrow)} variant="secondary">
               {busyAction === "dispute" ? "..." : "Dispute"}
-            </Button>
-            <Button disabled={!canRefund || Boolean(busyAction)} onClick={() => runAction("refund", refundEscrow)} variant="danger">
-              {busyAction === "refund" ? "..." : "Refund"}
             </Button>
           </div>
         </td>

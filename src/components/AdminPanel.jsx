@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 
 import {
+  getAdminEscrows,
   getAdminSummary,
   getAdminTransactions,
   getAdminUsers,
+  refundEscrow,
   resetUserDemoBalance,
   setUserDemoBalance,
   suspendAdminUser,
@@ -16,6 +18,7 @@ export function AdminPanel({ currentUser }) {
   const [summary, setSummary] = useState(null);
   const [users, setUsers] = useState([]);
   const [transactions, setTransactions] = useState([]);
+  const [escrows, setEscrows] = useState([]);
   const [search, setSearch] = useState("");
   const [amountByUser, setAmountByUser] = useState({});
   const [loading, setLoading] = useState(false);
@@ -27,14 +30,16 @@ export function AdminPanel({ currentUser }) {
     setMessage(null);
 
     try {
-      const [summaryData, userData, transactionData] = await Promise.all([
+      const [summaryData, userData, transactionData, escrowData] = await Promise.all([
         getAdminSummary(),
         getAdminUsers({ search: query }),
-        getAdminTransactions({ limit: 50 })
+        getAdminTransactions({ limit: 50 }),
+        getAdminEscrows({ limit: 50 })
       ]);
       setSummary(summaryData);
       setUsers(userData.users ?? []);
       setTransactions(transactionData.transactions ?? []);
+      setEscrows(escrowData.escrows ?? []);
     } catch (error) {
       setMessage({ type: "error", text: error.message });
     } finally {
@@ -168,6 +173,52 @@ export function AdminPanel({ currentUser }) {
                 );
               })}
               {users.length === 0 ? <tr><td className="py-5 text-center text-slate-500" colSpan={7}>No users found</td></tr> : null}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <h2 className="text-lg font-black text-ink">Escrow control</h2>
+        <div className="mt-4 overflow-x-auto">
+          <table className="w-full min-w-[980px] text-left text-sm">
+            <thead className="text-xs uppercase text-slate-500">
+              <tr>
+                <th className="py-2">Buyer</th>
+                <th>Seller</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Escrow ID</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {escrows.map((escrow) => {
+                const canRefund = escrow.status === "DISPUTED";
+
+                return (
+                  <tr key={escrow.id}>
+                    <td className="py-3 font-semibold text-ink">{escrow.buyer_username ?? escrow.buyer_email ?? escrow.buyer_user_id}</td>
+                    <td>{escrow.seller_username ?? escrow.seller_email ?? escrow.seller_user_id}</td>
+                    <td>{escrow.amount} {escrow.asset}</td>
+                    <td><Status value={escrow.status} /></td>
+                    <td className="max-w-[180px] truncate font-mono text-xs">{escrow.onchain_escrow_id ?? escrow.id}</td>
+                    <td>{formatDate(escrow.created_at)}</td>
+                    <td>
+                      <Button
+                        disabled={!canRefund || Boolean(busyAction)}
+                        onClick={() => runAction(`refund-${escrow.id}`, () => refundEscrow(escrow.id))}
+                        type="button"
+                        variant="danger"
+                      >
+                        {busyAction === `refund-${escrow.id}` ? "Refunding..." : "Refund"}
+                      </Button>
+                    </td>
+                  </tr>
+                );
+              })}
+              {escrows.length === 0 ? <tr><td className="py-5 text-center text-slate-500" colSpan={7}>No escrows found</td></tr> : null}
             </tbody>
           </table>
         </div>
