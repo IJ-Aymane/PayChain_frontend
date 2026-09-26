@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { claimFaucet, clearToken, getBalance, getHistory, getReceipt, logout } from "../api/index.js";
+import { AdminPanel } from "../components/AdminPanel.jsx";
 import { BalanceCard } from "../components/BalanceCard.jsx";
 import { BankHeader } from "../components/BankHeader.jsx";
 import { BankSidebar } from "../components/BankSidebar.jsx";
@@ -23,6 +24,7 @@ const VIEW_LABELS = {
   localChain: "Local Chain",
   wallet: "Wallet",
   security: "Security",
+  admin: "Admin"
 };
 
 export function Dashboard({ user, onLogout }) {
@@ -72,7 +74,7 @@ export function Dashboard({ user, onLogout }) {
         setBalance(result.balance);
       }
       await refresh();
-      setClaimStatus({ type: "success", text: "100 demo PAY claimed successfully." });
+      setClaimStatus({ type: "success", text: "100 PAY added to the sandbox ledger." });
     } catch (err) {
       setClaimStatus({ type: "error", text: err.message });
       await refresh().catch(() => {});
@@ -98,8 +100,8 @@ export function Dashboard({ user, onLogout }) {
   async function handleLogout() {
     try {
       await logout();
-    } catch {
-      // Local logout still clears the stale browser token if the API is unreachable.
+    } catch (err) {
+      setError(err.message);
     } finally {
       clearToken();
       onLogout();
@@ -173,6 +175,8 @@ function renderView(props) {
       return <WalletView balance={props.balance} user={props.user} />;
     case "security":
       return <SecurityPanel user={props.user} />;
+    case "admin":
+      return <AdminPanel currentUser={props.user} />;
     default:
       return <OverviewView {...props} />;
   }
@@ -221,9 +225,9 @@ function SendView({ onDone }) {
       <BankInfoPanel
         rows={[
           ["Recipient", "ID / Username / Email"],
-          ["Asset", "PAY demo token"],
-          ["Execution", "Backend session protected"],
-          ["Money risk", "No real funds in demo mode"]
+          ["Asset", "PAY sandbox token"],
+          ["Execution", "Authenticated backend ledger"],
+          ["Settlement mode", "Sandbox only, no real funds moved"]
         ]}
         title="Transfer details"
       />
@@ -237,10 +241,10 @@ function EscrowView({ onDone }) {
       <EscrowPanel onDone={onDone} />
       <BankInfoPanel
         rows={[
-          ["Buyer", "Demo ETH is held internally"],
+          ["Buyer", "ETH is reserved in the sandbox ledger"],
           ["Seller", "Receives funds after release"],
-          ["Refund", "Returns the hold after dispute"],
-          ["Mode", "MySQL ledger only"]
+          ["Refund", "Admin arbitrator returns the reserved funds"],
+          ["Mode", "Sandbox ledger"]
         ]}
         title="Escrow controls"
       />
@@ -254,7 +258,7 @@ function WalletView({ balance, user }) {
       <WalletCard user={user} />
       <BankInfoPanel
         rows={[
-          ["Network", balance?.mode === "demo" ? "Demo ledger" : "Base Sepolia"],
+          ["Network", balance?.mode === "demo" ? "Sandbox ledger" : "Base Sepolia"],
           ["ETH", `${formatAmount(balance?.eth?.balance ?? "0")} ETH`],
           ["PAY", `${formatAmount(balance?.token?.balance ?? "0")} ${balance?.token?.symbol ?? "PAY"}`],
           ["Private key", "Encrypted and never shown in the UI"]
@@ -266,7 +270,7 @@ function WalletView({ balance, user }) {
 }
 
 function AccountPanel({ balance, user }) {
-  const mode = balance?.mode === "blockchain" ? "Live" : "Demo";
+  const mode = balance?.mode === "blockchain" ? "Live" : "Sandbox";
 
   return (
     <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
@@ -275,7 +279,7 @@ function AccountPanel({ balance, user }) {
           <p className="text-sm font-bold text-slate-500">Primary account</p>
           <h2 className="mt-1 text-2xl font-black text-ink">{user?.username}</h2>
         </div>
-        <span className={`rounded-md px-3 py-2 text-xs font-black uppercase tracking-wide ${mode === "Demo" ? "bg-amber-50 text-amber-700" : "bg-emerald-50 text-emerald-700"}`}>
+        <span className={`rounded-md px-3 py-2 text-xs font-black uppercase tracking-wide ${mode === "Sandbox" ? "bg-amber-50 text-amber-700" : "bg-emerald-50 text-emerald-700"}`}>
           {mode}
         </span>
       </div>

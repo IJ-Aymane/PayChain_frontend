@@ -56,7 +56,7 @@ export function StatementPanel({ onReceipt, user }) {
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <p className="text-sm font-bold text-slate-500">Account statement</p>
-            <h2 className="mt-1 text-2xl font-black text-ink">Demo PAY movements</h2>
+            <h2 className="mt-1 text-2xl font-black text-ink">PAY account movements</h2>
           </div>
           <Button disabled={loading} onClick={() => loadStatement(filters)} variant="secondary">
             {loading ? "Refreshing..." : "Refresh"}

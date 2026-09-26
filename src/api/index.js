@@ -1,4 +1,6 @@
-const DEFAULT_API_BASE_URL = "https://paychain-backend-s93o.onrender.com/api";
+const DEFAULT_API_BASE_URL = import.meta.env.DEV
+  ? "http://localhost:4000/api"
+  : "https://paychain-backend-s93o.onrender.com/api";
 const API_BASE_URL = normalizeApiBaseUrl(import.meta.env.VITE_API_BASE_URL ?? DEFAULT_API_BASE_URL);
 const TOKEN_KEY = "paychain_token";
 
@@ -110,11 +112,11 @@ export async function getAdminEscrows(params = {}) {
   return request(`/admin/escrows${toQuery(params)}`);
 }
 
-export async function resetUserDemoBalance(id) {
+export async function resetUserSandboxBalance(id) {
   return request(`/admin/users/${encodeURIComponent(id)}/reset-demo-balance`, { method: "POST" });
 }
 
-export async function setUserDemoBalance(id, amount) {
+export async function setUserSandboxBalance(id, amount) {
   return request(`/admin/users/${encodeURIComponent(id)}/set-demo-balance`, { method: "POST", body: { amount } });
 }
 

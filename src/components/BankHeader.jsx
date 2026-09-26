@@ -13,7 +13,7 @@ export function BankHeader({ activeLabel, balance, onMenuClick, user }) {
         </div>
         <div className="hidden items-center gap-3 md:flex">
           <span className={`rounded-md px-3 py-2 text-xs font-black uppercase tracking-wide ${balance?.mode === "demo" ? "bg-amber-50 text-amber-700" : "bg-emerald-50 text-emerald-700"}`}>
-            {balance?.mode === "demo" ? "Demo Mode" : "Base Sepolia"}
+            {balance?.mode === "demo" ? "Sandbox Mode" : "Base Sepolia"}
           </span>
           <div className="rounded-md border border-slate-200 bg-white px-3 py-2 text-right shadow-sm">
             <p className="text-xs font-bold text-slate-500">User ID</p>

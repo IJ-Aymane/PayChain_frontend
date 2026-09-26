@@ -72,8 +72,8 @@ function TransactionTable({ compact = false, onReceipt, transactions, user }) {
               <td>{formatDate(item.created_at)}</td>
               <td><Status value={normalizeStatus(item.status)} /></td>
               <td className="max-w-[240px] truncate font-mono text-xs">
-                {isDemoTransaction(item) ? (
-                  <span className="font-sans text-slate-500">Demo ref</span>
+                {isSandboxTransaction(item) ? (
+                  <span className="font-sans text-slate-500">Sandbox ref</span>
                 ) : item.tx_hash ? (
                   <a
                     className="text-grape underline-offset-2 hover:underline"
@@ -130,8 +130,8 @@ function EscrowRow({ escrow, user, onRefresh }) {
         <td><Status value={normalizeStatus(escrow.status)} /></td>
         <td className="max-w-[150px] truncate font-mono text-xs">{escrow.onchain_escrow_id ?? "-"}</td>
         <td className="max-w-[180px] truncate font-mono text-xs">
-          {isDemoEscrow(escrow) ? (
-            <span className="font-sans text-slate-500">Demo ref</span>
+          {isSandboxEscrow(escrow) ? (
+            <span className="font-sans text-slate-500">Sandbox ref</span>
           ) : escrow.deposit_tx_hash ? (
             <a
               className="text-grape underline-offset-2 hover:underline"
@@ -163,11 +163,11 @@ function EscrowRow({ escrow, user, onRefresh }) {
   );
 }
 
-function isDemoTransaction(item) {
+function isSandboxTransaction(item) {
   return parseMetadata(item.metadata_json).mode === "demo" || String(item.tx_hash ?? "").startsWith("demo-");
 }
 
-function isDemoEscrow(escrow) {
+function isSandboxEscrow(escrow) {
   return String(escrow.onchain_escrow_id ?? "").startsWith("demo-");
 }
 

@@ -16,7 +16,7 @@ export function SendPanel({ onDone }) {
 
     try {
       const result = await transferPayTokens(form);
-      setStatus({ type: "success", text: `Demo PAY sent. Reference: ${result.transaction.tx_hash}` });
+      setStatus({ type: "success", text: `PAY transfer sent. Reference: ${result.transaction.tx_hash}` });
       setForm({ recipient: "", amount: "" });
       await onDone?.();
     } catch (error) {
@@ -50,7 +50,7 @@ export function SendPanel({ onDone }) {
         />
         {status ? <Message status={status} /> : null}
         <Button disabled={loading} type="submit">
-          {loading ? "Sending demo PAY..." : "Send PAY Tokens"}
+          {loading ? "Sending PAY..." : "Send PAY Tokens"}
         </Button>
       </form>
     </section>

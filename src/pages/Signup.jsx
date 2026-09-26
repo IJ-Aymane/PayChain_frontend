@@ -30,7 +30,7 @@ export function Signup({ onAuthenticated, onSwitch }) {
         <div>
           <p className="text-sm font-black uppercase tracking-wide text-emerald-700">PayChain</p>
           <h1 className="mt-2 text-3xl font-black text-ink">Create account</h1>
-          <p className="mt-2 text-sm text-slate-500">Create your PayChain account and demo wallet.</p>
+          <p className="mt-2 text-sm text-slate-500">Create your PayChain account and secure wallet.</p>
         </div>
         <form className="grid gap-4" onSubmit={handleSubmit}>
           <TextInput

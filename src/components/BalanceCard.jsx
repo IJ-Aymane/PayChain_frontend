@@ -4,9 +4,9 @@ export function BalanceCard({ balance, claimLoading, claimStatus, loading, onCla
   const eth = balance?.eth?.balance ?? "0";
   const token = balance?.token?.balance ?? "0";
   const symbol = balance?.token?.symbol ?? "PAY";
-  const isDemo = balance?.mode === "demo";
-  const subtitle = isDemo ? "Local MySQL demo balance" : "Base Sepolia demo balance";
-  const claimMessage = isDemo ? "Adding 100 PAY to your demo account..." : "Claiming 100 PAY on Base Sepolia...";
+  const isSandbox = balance?.mode === "demo";
+  const subtitle = isSandbox ? "Sandbox ledger balance" : "Base Sepolia balance";
+  const claimMessage = isSandbox ? "Adding 100 PAY to your account..." : "Claiming 100 PAY on Base Sepolia...";
 
   return (
     <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
@@ -21,7 +21,7 @@ export function BalanceCard({ balance, claimLoading, claimStatus, loading, onCla
             Refresh
           </Button>
           <Button disabled={claimLoading} onClick={onClaim}>
-            {claimLoading ? "Claiming 100 PAY..." : "Get 100 Demo PAY"}
+            {claimLoading ? "Adding 100 PAY..." : "Add 100 PAY"}
           </Button>
         </div>
       </div>

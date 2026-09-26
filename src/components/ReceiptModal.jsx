@@ -7,7 +7,7 @@ export function ReceiptModal({ receipt, onClose }) {
     return null;
   }
 
-  const reference = receipt.reference ?? `demo-receipt-${receipt.id}`;
+  const reference = receipt.reference ?? `sandbox-receipt-${receipt.id}`;
   const isBlockchain = receipt.mode === "blockchain" && receipt.reference;
 
   return (
@@ -25,7 +25,7 @@ export function ReceiptModal({ receipt, onClose }) {
           <div className="grid gap-3 sm:grid-cols-3">
             <Metric label="Amount" value={`${receipt.amount} ${receipt.asset}`} />
             <Metric label="Status" value={normalizeStatus(receipt.status)} />
-            <Metric label="Mode" value={receipt.mode === "blockchain" ? "Base Sepolia" : "Demo ledger"} />
+            <Metric label="Mode" value={receipt.mode === "blockchain" ? "Base Sepolia" : "Sandbox ledger"} />
           </div>
 
           <div className="rounded-md border border-slate-200">
@@ -91,7 +91,7 @@ function normalizeStatus(status) {
 
 function formatParty(party) {
   if (!party?.userId) {
-    return "PayChain demo treasury";
+    return "PayChain treasury";
   }
 
   return `${party.username ?? "User"} (${party.email ?? party.userId})`;

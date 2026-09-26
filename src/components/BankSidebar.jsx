@@ -7,6 +7,7 @@ const NAV_ITEMS = [
   { id: "localChain", label: "Local Chain", icon: ChainIcon },
   { id: "wallet", label: "Wallet", icon: WalletIcon },
   { id: "security", label: "Security", icon: LockIcon },
+  { id: "admin", label: "Admin", icon: AdminIcon }
 ];
 
 export function BankSidebar({ activeView, balance, mobileOpen, onClose, onLogout, onNavigate, user }) {
@@ -23,7 +24,7 @@ export function BankSidebar({ activeView, balance, mobileOpen, onClose, onLogout
               <div className="grid h-10 w-10 place-items-center rounded-md bg-ink text-sm font-black text-white">PC</div>
               <div>
                 <p className="text-sm font-black uppercase tracking-wide text-ink">PayChain</p>
-                <p className="text-xs font-medium text-slate-500">Demo Banking Console</p>
+                <p className="text-xs font-medium text-slate-500">Sandbox Banking Console</p>
               </div>
             </div>
             <button aria-label="Close menu" className="grid h-9 w-9 place-items-center rounded-md border border-slate-200 text-slate-500 lg:hidden" onClick={onClose} type="button">
@@ -36,7 +37,7 @@ export function BankSidebar({ activeView, balance, mobileOpen, onClose, onLogout
           <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
             <p className="text-xs font-bold uppercase tracking-wide text-slate-500">Available balance</p>
             <p className="mt-2 text-2xl font-black text-ink">{formatAmount(tokenBalance)} {symbol}</p>
-            <p className="mt-1 text-xs font-medium text-slate-500">{balance?.mode === "blockchain" ? "Base Sepolia" : "Demo ledger"}</p>
+            <p className="mt-1 text-xs font-medium text-slate-500">{balance?.mode === "blockchain" ? "Base Sepolia" : "Sandbox ledger"}</p>
           </div>
         </div>
 
@@ -120,6 +121,10 @@ function WalletIcon() {
 
 function LockIcon() {
   return <IconBase><rect height="10" rx="2" width="16" x="4" y="11" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /></IconBase>;
+}
+
+function AdminIcon() {
+  return <IconBase><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" /><path d="M4 21a8 8 0 0 1 16 0" /><path d="m16 11 2 2 4-4" /></IconBase>;
 }
 
 function LogoutIcon() {

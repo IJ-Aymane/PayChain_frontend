@@ -16,7 +16,7 @@ export function EscrowPanel({ onDone }) {
 
     try {
       const result = await createEscrow({ ...form, asset: "ETH" });
-      setStatus({ type: "success", text: `Demo escrow created. Reference: ${result.escrow.deposit_tx_hash}` });
+      setStatus({ type: "success", text: `Escrow created. Reference: ${result.escrow.deposit_tx_hash}` });
       setForm({ seller: "", amount: "" });
       await onDone?.();
     } catch (error) {
@@ -41,14 +41,14 @@ export function EscrowPanel({ onDone }) {
         <TextInput
           id="escrow-amount"
           inputMode="decimal"
-          label="Demo ETH amount"
+          label="ETH amount"
           onChange={(event) => setForm({ ...form, amount: event.target.value })}
           placeholder="0.1"
           required
           value={form.amount}
         />
         {status ? <Message status={status} /> : null}
-        <Button disabled={loading} type="submit">{loading ? "Creating demo escrow..." : "Create demo escrow"}</Button>
+        <Button disabled={loading} type="submit">{loading ? "Creating escrow..." : "Create escrow"}</Button>
       </form>
     </section>
   );

@@ -6,8 +6,8 @@ import {
   getAdminTransactions,
   getAdminUsers,
   refundEscrow,
-  resetUserDemoBalance,
-  setUserDemoBalance,
+  resetUserSandboxBalance,
+  setUserSandboxBalance,
   suspendAdminUser,
   unsuspendAdminUser
 } from "../api/index.js";
@@ -57,7 +57,7 @@ export function AdminPanel({ currentUser }) {
 
     try {
       await action();
-      setMessage({ type: "success", text: "Admin demo action completed." });
+      setMessage({ type: "success", text: "Admin action completed." });
       await loadAdminData(search);
     } catch (error) {
       setMessage({ type: "error", text: error.message });
@@ -76,8 +76,8 @@ export function AdminPanel({ currentUser }) {
       <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <p className="text-sm font-bold text-slate-500">Demo administration</p>
-            <h2 className="mt-1 text-2xl font-black text-ink">PFA control desk</h2>
+            <p className="text-sm font-bold text-slate-500">Sandbox administration</p>
+            <h2 className="mt-1 text-2xl font-black text-ink">Operations console</h2>
           </div>
           <Button disabled={loading} onClick={() => loadAdminData(search)} variant="secondary">
             {loading ? "Refreshing..." : "Refresh"}
@@ -89,14 +89,14 @@ export function AdminPanel({ currentUser }) {
         <div className="mt-5 grid gap-3 md:grid-cols-4">
           <Metric label="Users" value={summary?.users ?? 0} />
           <Metric label="Transactions" value={summary?.transactions?.total ?? 0} />
-          <Metric label="PAY in demo" value={`${formatAmount(summary?.ledgerTotals?.pay ?? 0)} PAY`} />
-          <Metric label="ETH in demo" value={`${formatAmount(summary?.ledgerTotals?.eth ?? 0)} ETH`} />
+          <Metric label="PAY in ledger" value={`${formatAmount(summary?.ledgerTotals?.pay ?? 0)} PAY`} />
+          <Metric label="ETH in ledger" value={`${formatAmount(summary?.ledgerTotals?.eth ?? 0)} ETH`} />
         </div>
       </div>
 
       <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
         <div className="flex flex-wrap items-end justify-between gap-3">
-          <h2 className="text-lg font-black text-ink">Users and demo balances</h2>
+          <h2 className="text-lg font-black text-ink">Users and balances</h2>
           <form className="flex w-full gap-2 sm:w-auto" onSubmit={handleSearch}>
             <TextInput
               className="min-w-0 flex-1 sm:w-72"
@@ -151,7 +151,7 @@ export function AdminPanel({ currentUser }) {
                         />
                         <Button
                           disabled={Boolean(busyAction)}
-                          onClick={() => runAction(`set-${user.id}`, () => setUserDemoBalance(user.id, userAmount || "0"))}
+                          onClick={() => runAction(`set-${user.id}`, () => setUserSandboxBalance(user.id, userAmount || "0"))}
                           type="button"
                           variant="secondary"
                         >
@@ -161,7 +161,7 @@ export function AdminPanel({ currentUser }) {
                     </td>
                     <td>
                       <div className="flex flex-wrap gap-2">
-                        <Button disabled={Boolean(busyAction)} onClick={() => runAction(`reset-${user.id}`, () => resetUserDemoBalance(user.id))} type="button" variant="secondary">Reset</Button>
+                        <Button disabled={Boolean(busyAction)} onClick={() => runAction(`reset-${user.id}`, () => resetUserSandboxBalance(user.id))} type="button" variant="secondary">Reset</Button>
                         {locked ? (
                           <Button disabled={Boolean(busyAction)} onClick={() => runAction(`unlock-${user.id}`, () => unsuspendAdminUser(user.id))} type="button" variant="secondary">Unsuspend</Button>
                         ) : (
