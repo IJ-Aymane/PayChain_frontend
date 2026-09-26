@@ -7,7 +7,6 @@ const NAV_ITEMS = [
   { id: "localChain", label: "Local Chain", icon: ChainIcon },
   { id: "wallet", label: "Wallet", icon: WalletIcon },
   { id: "security", label: "Security", icon: LockIcon },
-  { id: "admin", label: "Admin", icon: AdminIcon }
 ];
 
 export function BankSidebar({ activeView, balance, mobileOpen, onClose, onLogout, onNavigate, user }) {
@@ -123,9 +122,7 @@ function LockIcon() {
   return <IconBase><rect height="10" rx="2" width="16" x="4" y="11" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /></IconBase>;
 }
 
-function AdminIcon() {
-  return <IconBase><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" /><path d="M4 21a8 8 0 0 1 16 0" /><path d="m16 11 2 2 4-4" /></IconBase>;
-}
+
 
 function LogoutIcon() {
   return <IconBase><path d="M10 17 15 12 10 7" /><path d="M15 12H3" /><path d="M21 19V5" /></IconBase>;
